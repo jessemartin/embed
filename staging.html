@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>embed test</title>
+<script type="text/javascript" src="https://s0.staging.assets-yammer.com/assets/platform_embed.js"></script>
+</head>
+<body>
+  <h1>Staging Embed</h1>
+  <div id="embed-container" style="height:400px;width:500px;"></div>
+  <script>
+    yam.connect.embedFeed({
+      container: '#embed-container',
+      feedType: 'group',
+      feedId: 21622399
+    });
+  </script>
+</body>
+</html>
