@@ -34,10 +34,10 @@
       container.appendChild(embedIframe);
       
       var loginWithToken = function (token) {
-        embedIframe.contentWindow.postMessage(JSON.stringify({
+        embedIframe.contentWindow.postMessage({
           message: 'loginWithAadToken',
           token: token,
-        }), '*');
+        }, '*');
       };
       
       var handleMessage = function (evt) {
