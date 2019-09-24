@@ -11,15 +11,10 @@
     var createEmbedIframe = function () {
       var iframe = document.createElement('iframe');
       iframe.id = "embed-feed";
-        debugger;
       iframe.name = "embed-feed";
-        debugger;
       iframe.title = "Yammer";
-        debugger;
       iframe.className = "yj-embed-widget yj-embed-feed";
-        debugger;
       iframe.style = "border: 0px; overflow: hidden; min-height: 26px; width: 100%; height: 100%;";
-        debugger;
       return iframe;
     };
 
@@ -32,29 +27,28 @@
     var loadEmbed = function () {
       var tokenInput = document.querySelector('.token-input');
       var embedIframe = createEmbedIframe();
-        debugger;
       var container = document.querySelector('.embed-container');
-        debugger;
+      
       empty(container);
-        debugger;
+      
       container.appendChild(embedIframe);
-        debugger;
+      
       var loginWithToken = function (token) {
-        embedIframe.contentWindow.postMessage({
+        embedIframe.contentWindow.postMessage(JSON.stringify({
           message: 'loginWithAadToken',
           token: token,
-        }, '*');
+        }), '*');
       };
-        debugger;
+      
       var handleMessage = function (evt) {
         try {
           var message = evt.data.message;
-        debugger;
+          
           if (message === 'yam.embed.initialLoginFailure') {
             var token = tokenInput.value;
-        debugger;
+            
             loginWithToken(token);
-        debugger;
+            
           }
         } catch (e) {
         debugger;
@@ -62,9 +56,8 @@
       };
 
       window.addEventListener('message', handleMessage);
-        debugger;
+      
       embedIframe.src = "https://www.yammer.com/embed-feed?container=%23embed-container";
-        debugger;
     };
 
     var loadEmbedButton = document.querySelector('.load-embed');
