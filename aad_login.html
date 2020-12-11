@@ -13,7 +13,7 @@
       iframe.id = "embed-feed";
       iframe.name = "embed-feed";
       iframe.title = "Yammer";
-      iframe.class = "yj-embed-widget yj-embed-feed";
+      iframe.className = "yj-embed-widget yj-embed-feed";
       iframe.style = "border: 0px; overflow: hidden; min-height: 26px; width: 100%; height: 100%;";
       return iframe;
     };
@@ -28,31 +28,35 @@
       var tokenInput = document.querySelector('.token-input');
       var embedIframe = createEmbedIframe();
       var container = document.querySelector('.embed-container');
-
+      
       empty(container);
-
+      
       container.appendChild(embedIframe);
-
+      
       var loginWithToken = function (token) {
         embedIframe.contentWindow.postMessage({
           message: 'loginWithAadToken',
           token: token,
         }, '*');
       };
-
+      
       var handleMessage = function (evt) {
         try {
           var message = evt.data.message;
-
+          
           if (message === 'yam.embed.initialLoginFailure') {
             var token = tokenInput.value;
+            
             loginWithToken(token);
+            
           }
-        } catch (e) { }
+        } catch (e) {
+        debugger;
+        }
       };
 
       window.addEventListener('message', handleMessage);
-
+      
       embedIframe.src = "https://www.yammer.com/embed-feed?container=%23embed-container";
     };
 
