@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>SDK test</title>
+<script type="text/javascript" data-app-id="lNei9t9fGC8JdipCvbwxog" src="https://c64.assets-yammer.com/assets/platform_js_sdk.js"></script>
+</head>
+<body>
+  <span id="yj-share-button"></span>
+  <script type="text/javascript">
+    yam.getLoginStatus(
+      function(response) {
+        if (response.authResponse) {
+          console.log("logged in");
+          console.dir(response); //print user information to the console
+          yam.platform.request({
+            url: "users.json",     //this is one of many REST endpoints that are available
+            method: "GET",
+            data: {    //use the data object literal to specify parameters, as documented in the REST API section of this developer site
+              "letter": "a",
+              "page": "2",
+            },
+            success: function (user) { //print message response information to the console
+              alert("The request was successful.");
+              console.dir(user);
+            },
+            error: function (user) {
+              alert("There was an error with the request.");
+            }
+          });
+        } else {
+          yam.platform.login(function (response) { //prompt user to login and authorize your app, as necessary
+            if (response.authResponse) {
+              console.dir(response); //print user information to the console
+            }
+          });
+        }
+      }
+    );
+  </script>
+</body>
+</html>
