@@ -9,7 +9,7 @@
   <script type="text/javascript">
     yam.platform.login(function (response) {
       if (response.authResponse) {
-        console.log("logged in", response);
+        console.log("login successful", response);
         yam.platform.request({
           url: "users.json",
           method: "GET",
@@ -24,6 +24,9 @@
             console.log("request failed");
           }
         });
+      } else {
+        console.log("login failed", response);
+      }
     });
   </script>
 </body>
