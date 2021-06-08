@@ -6,27 +6,30 @@
 </head>
 <body>
   <span id="yj-share-button"></span>
+  <button class="login-button">Login</button>
   <script type="text/javascript">
-    yam.platform.login(function (response) {
-      if (response.authResponse) {
-        console.log("login successful", response);
-        yam.platform.request({
-          url: "users.json",
-          method: "GET",
-          data: {
-            "letter": "a",
-            "page": "2",
-          },
-          success: function (user) {
-            console.log("request successful", user);
-          },
-          error: function (user) {
-            console.log("request failed");
-          }
-        });
-      } else {
-        console.log("login failed", response);
-      }
+    document.querySelector(".login-button").addEventListener((evt) => {
+      yam.platform.login((response) => {
+        if (response.authResponse) {
+          console.log("login successful", response);
+          yam.platform.request({
+            url: "users.json",
+            method: "GET",
+            data: {
+              "letter": "a",
+              "page": "2",
+            },
+            success: (user) => {
+              console.log("request successful", user);
+            },
+            error: (user) => {
+              console.log("request failed");
+            }
+          });
+        } else {
+          console.log("login failed", response);
+        }
+      });
     });
   </script>
 </body>
