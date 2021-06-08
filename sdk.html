@@ -8,7 +8,7 @@
   <span id="yj-share-button"></span>
   <button class="login-button">Login</button>
   <script type="text/javascript">
-    document.querySelector(".login-button").addEventListener((evt) => {
+    document.querySelector(".login-button").addEventListener("click", (evt) => {
       yam.platform.login((response) => {
         if (response.authResponse) {
           console.log("login successful", response);
