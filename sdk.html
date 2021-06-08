@@ -9,30 +9,41 @@
   <h1 class="login-status">Signed Out</button>
   <button class="login-button">Login</button>
   <script type="text/javascript">
+    const loginButton = document.querySelector(".login-button");
     const loginStatus = document.querySelector(".login-status");
+
+    const renderLoggedIn = () => {
+      loginStatus.innerText = "Signed In";
+      loginButton.style.display = "none";
+    };
+    const renderLoggedOut = () => {
+      loginStatus.innerText = "Signed Out";
+      loginButton.style.display = "block";
+    };
+
+    renderLoggedOut();
+
     document.querySelector(".login-button").addEventListener("click", (evt) => {
       yam.platform.login((response) => {
         if (response.authResponse) {
-          loginStatus.innerText = "Signed In";
-          loginButton.style.display = "none";
+          renderLoggedIn();
           console.log("login successful", response);
-          yam.platform.request({
-            url: "users.json",
-            method: "GET",
-            data: {
-              "letter": "a",
-              "page": "2",
-            },
-            success: (user) => {
-              console.log("request successful", user);
-            },
-            error: (user) => {
-              console.log("request failed");
-            }
-          });
+//           yam.platform.request({
+//             url: "users.json",
+//             method: "GET",
+//             data: {
+//               "letter": "a",
+//               "page": "2",
+//             },
+//             success: (user) => {
+//               console.log("request successful", user);
+//             },
+//             error: (user) => {
+//               console.log("request failed");
+//             }
+//           });
         } else {
-          loginStatus.innerText = "Signed Out";
-          loginButton.style.display = "inline-block";
+          renderLoggedOut();
           console.log("login failed", response);
         }
       });
