@@ -6,11 +6,15 @@
 </head>
 <body>
   <span id="yj-share-button"></span>
+  <h1 class="login-status">Signed Out</button>
   <button class="login-button">Login</button>
   <script type="text/javascript">
+    const loginStatus = document.querySelector(".login-status");
     document.querySelector(".login-button").addEventListener("click", (evt) => {
       yam.platform.login((response) => {
         if (response.authResponse) {
+          loginStatus.innerText = "Signed In";
+          loginButton.style.display = "none";
           console.log("login successful", response);
           yam.platform.request({
             url: "users.json",
@@ -27,6 +31,8 @@
             }
           });
         } else {
+          loginStatus.innerText = "Signed Out";
+          loginButton.style.display = "inline-block";
           console.log("login failed", response);
         }
       });
