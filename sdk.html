@@ -6,18 +6,18 @@
 </head>
 <body>
   <span id="yj-share-button"></span>
-  <h1 class="login-status">Signed Out</button>
+  <h1 class="login-status"></h1>
   <button class="login-button">Login</button>
   <script type="text/javascript">
     const loginButton = document.querySelector(".login-button");
     const loginStatus = document.querySelector(".login-status");
 
     const renderLoggedIn = () => {
-      loginStatus.innerText = "Signed In";
+      loginStatus.innerText = "Status: Signed In";
       loginButton.style.display = "none";
     };
     const renderLoggedOut = () => {
-      loginStatus.innerText = "Signed Out";
+      loginStatus.innerText = "Status: Signed Out";
       loginButton.style.display = "block";
     };
 
