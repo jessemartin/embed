@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Yammer API Sample</title>
+<script type="text/javascript" src="https://alcdn.msauth.net/browser/2.15.0/js/msal-browser.min.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+  const config = {
+    auth: {
+      clientId: 'Your AAD app id goes here',
+      authority: 'https://login.microsoftonline.com/organizations',
+    },
+    cache: {
+      cacheLocation: 'localStorage',
+      storeAuthStateInCookie: false,
+    },
+  };
+
+  const redirectUri = 'https://jessemartin.github.io/embed/yammer_api_sample.html';
+
+  const yammerUserImpersonationScope = 'https://www.yammer.com/user_impersonation';
+
+  class Authenticator {
+    constructor() {
+      this.app = new PublicClientApplication(config);
+      this.account = null;
+    }
+
+    async handleRedirect() {
+      try {
+        const response = await this.app.handleRedirectPromise();
+
+        if (response) {
+          this.account = response.account;
+        } else {
+          const account = this.getAccount();
+
+          if (account) {
+            this.account = account;
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    hasAccount() {
+      const accounts = this.app.getAllAccounts();
+
+      return accounts != null && accounts.length > 0;
+    }
+
+    login() {
+      const loginRedirectRequest = {
+        scopes: [],
+        redirectStartPage: window.location.href
+      };
+
+      this.app.loginRedirect(loginRedirectRequest);
+    }
+
+    acquireYammerToken() {
+      return this.acquireToken(yammerUserImpersonationScope);
+    }
+
+    getAccount() {
+      const accounts = this.app.getAllAccounts();
+
+      if (accounts == null || accounts.length === 0) {
+        return null;
+      }
+
+      if (accounts.length > 1) {
+        // TODO: Show account picker when multiple accounts exist
+        alert('multiple accounts found');
+      }
+
+      return accounts[0];
+    }
+
+    async acquireToken(scopes) {
+      if (!this.account) {
+        throw new Error('No account. User is not logged in.');
+      }
+
+      const silentRequest = {
+        scopes,
+        account: this.account,
+        redirectUri,
+      };
+
+      try {
+        const { accessToken } = await this.app.acquireTokenSilent(silentRequest);
+
+        return accessToken;
+      } catch (e) {
+        console.log('acquireTokenSilent failed', e);
+
+        if (e instanceof InteractionRequiredAuthError) {
+          const redirectRequest = {
+            ...silentRequest,
+            redirectStartPage: window.location.href,
+          };
+
+          await this.app.acquireTokenRedirect(redirectRequest);
+          throw new Error('Acquiring token through redirect flow');
+        }
+
+        throw e;
+      }
+    }
+  }
+
+  const run = async () => {
+    const authenticator = new Authenticator();
+
+    await authenticator.handleRedirect();
+
+    if (authenticator.hasAccount()) {
+      console.log('signed in');
+
+      try {
+        const response = await fetch("https://api.yammer.com/api/v1/users/current.json", {
+          headers: {
+            Authorization: `Bearer ${authenticator.acquireYammerToken()}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Non-ok response code");
+        }
+
+        const payload = await response.json();
+
+        console.log("yammer api call successful:", payload);
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      console.log('signed out. signing in...');
+
+      authenticator.login();
+    }
+  };
+    
+  run();
+  </script>
+</body>
+</html>
