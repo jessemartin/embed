@@ -97,7 +97,7 @@
       } catch (e) {
         console.log('acquireTokenSilent failed', e);
 
-        if (e instanceof InteractionRequiredAuthError) {
+        if (e instanceof msal.InteractionRequiredAuthError) {
           const redirectRequest = {
             ...silentRequest,
             redirectStartPage: window.location.href,
