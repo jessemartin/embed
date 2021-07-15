@@ -23,7 +23,7 @@
 
   class Authenticator {
     constructor() {
-      this.app = new PublicClientApplication(config);
+      this.app = new msal.PublicClientApplication(config);
       this.account = null;
     }
 
