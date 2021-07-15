@@ -121,9 +121,10 @@
       console.log('signed in');
 
       try {
+        const yammerToken = await authenticator.acquireYammerToken();
         const response = await fetch("https://api.yammer.com/api/v1/users/current.json", {
           headers: {
-            Authorization: `Bearer ${authenticator.acquireYammerToken()}`,
+            Authorization: `Bearer ${yammerToken}`,
           },
         });
 
